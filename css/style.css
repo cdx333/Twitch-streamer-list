@@ -1,0 +1,50 @@
+body{
+    
+}
+header{
+    text-align: center;
+    background-color:#6441a5;
+    color:white;
+    font-family: sans-serif;
+    padding: 15px 0px 15px 0px;
+    margin-top:15px;
+    
+}
+
+h1{
+    font-size: 4em !important;
+}
+
+ul{
+    padding:0px;
+}
+
+ul>li{
+    height:100px;
+    background-color:#f39ab2;
+    margin:15px 0px;
+    
+    
+    list-style: none;
+    width:100%;
+    
+}
+
+.offline h3{
+    color:#9f1036;
+}
+
+li>div{
+    
+}
+
+.online{
+    background-color:#bdf098;
+    color:#499b10;
+    font-weight: bold;    
+}
+
+.error{
+    background-color:#bbb;
+}
+
