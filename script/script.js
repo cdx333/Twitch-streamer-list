@@ -84,9 +84,11 @@ function getChannelData(streamer) {
 
     // Gather necessary values for tempChannelData
     function setChannelData(channelData, data, online) {
+        
         channelData.online = online;
         channelData.game = data.game;
         data = online ? data.channel : data;
+        channelData.logo = getLogo(data.logo);
         channelData.streamUrl = data.url;
         channelData.displayName = data.display_name;
         channelData.status = data.status;
@@ -99,7 +101,18 @@ function getChannelData(streamer) {
         channelData.errorCode = data.status;
         channelData.displayName = streamer;
         channelData.streamUrl = "#";
+        channelData.logo = "./assets/img/error.png";
         return channelData;
+    }
+
+    function getLogo(logoURL){
+        if(logoURL){
+            return logoURL;
+        } else{
+            // Sourced from 
+            // http://www.androidpolice.com/wp-content/uploads/2015/05/nexus2cee_unnamed-72.png
+            return "./assets/img/twitch-icon.png";
+        }
     }
 
     // Constructs the html for the <li> entries using the gathered data
@@ -113,7 +126,8 @@ function getChannelData(streamer) {
 
         var url = channelData.streamUrl;
         var urlEle = "<a href='" + url + "'>";
-        var nameDiv = "<div class='col-xs-4'>" + urlEle + name + "</a></div>";
+        var imgEle = "<img src='" + channelData.logo + "'/>";
+        var nameDiv = "<div class='col-xs-4'>" + imgEle + urlEle + name + "</a></div>";
 
         var activityStatus = channelData.status ? channelData.status : "";
         var game = channelData.game ? channelData.game + ": " : "";
