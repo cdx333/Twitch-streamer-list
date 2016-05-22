@@ -40,7 +40,7 @@ function getChannelData(streamer) {
          * have been finished before moving on with html construction
          */
         if(data.stream){
-            tempChannelData =  setOnlineChannelData(tempChannelData, data.stream);            
+            tempChannelData =  setChannelData(tempChannelData, data.stream, true);            
             addEntry();
             printHTML(++callbackCount);
         }
@@ -51,7 +51,7 @@ function getChannelData(streamer) {
         }
         else{
             $.getJSON(data._links.channel, function(data){
-                tempChannelData = setOfflineChannelData(tempChannelData, data);                
+                tempChannelData = setChannelData(tempChannelData, data, false);                
                 addEntry();
                 printHTML(++callbackCount);
             })
@@ -82,19 +82,11 @@ function getChannelData(streamer) {
     });
 }
 
-    // Gather necessary values
-    function setOnlineChannelData(channelData, data) {
-        channelData.online = true;
+    // Gather necessary values for tempChannelData
+    function setChannelData(channelData, data, online) {
+        channelData.online = online;
         channelData.game = data.game;
-        channelData.streamUrl = data.channel.url;
-        channelData.displayName = data.channel.display_name;
-        channelData.status = data.channel.status;
-        return channelData;
-    }
-
-    function setOfflineChannelData(channelData, data) {
-        channelData.online = false;
-        channelData.game = data.game;
+        data = online ? data.channel : data;
         channelData.streamUrl = data.url;
         channelData.displayName = data.display_name;
         channelData.status = data.status;
@@ -110,6 +102,7 @@ function getChannelData(streamer) {
         return channelData;
     }
 
+    // Constructs the html for the <li> entries using the gathered data
     function constructHtml(channelData) {
         var name = channelData.displayName;
 
@@ -121,7 +114,6 @@ function getChannelData(streamer) {
         var url = channelData.streamUrl;
         var urlEle = "<a href='" + url + "'>";
         var nameDiv = "<div class='col-xs-4'>" + urlEle + name + "</a></div>";
-
 
         var activityStatus = channelData.status ? channelData.status : "";
         var game = channelData.game ? channelData.game + ": " : "";
