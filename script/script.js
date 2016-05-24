@@ -66,6 +66,7 @@ function getChannelData(streamer) {
                 for(var i=0; i<streams.length; i++){
                     var currentEntry = entries[streams[i]]
                     var liHTML = constructHtml(currentEntry);
+                    console.log(liHTML);
                     if(currentEntry.online){
                         ul.prepend(liHTML);
                     }else{
@@ -122,20 +123,20 @@ function getChannelData(streamer) {
         var onlineStatus = channelData.online ? "online" : "offline";
         var id = " id='" + name + "'";
         var liClassId = getLiClass(onlineStatus, channelData.error) + id;
-        var liEle = "<li " + liClassId + "><row>";
+        var liEle = "<li " + liClassId + ">";
 
         var url = channelData.streamUrl;
         var urlEle = "<a href='" + url + "'>";
-        var imgEle = "<img src='" + channelData.logo + "'/>";
-        var nameDiv = "<div class='col-xs-4'>" + imgEle + urlEle + name + "</a></div>";
+        var imgEle = "<div class='col-xs-3'><img class='logo' src='" + channelData.logo + "'/></div>";
+        var nameDiv =  imgEle + "<div class='col-xs-9'><div class='col-sm-3'>" + urlEle + name + "</a></div>";
 
         var activityStatus = channelData.status ? channelData.status : "";
         var game = channelData.game ? channelData.game + ": " : "";
-        var activityDiv = "<div class='col-xs-5'>" + game + activityStatus + "</div>";
+        var activityDiv = "<div class='col-sm-7 status'>" + game + activityStatus + "</div>";
 
         var onlineStatusText = "<h3>" + onlineStatus + "</h3>";
-        var onlineStatusDiv = "<div class='col-xs-3'>" + onlineStatusText + "</div>";
-        return liEle + nameDiv + activityDiv + onlineStatusDiv + "</row></li>";
+        var onlineStatusDiv = "<div class='col-sm-2'>" + onlineStatusText + "</div>";
+        return liEle + "<div class='row'>" + nameDiv + activityDiv + onlineStatusDiv + "</div></div></li>";
 
     }
 
