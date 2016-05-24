@@ -1,5 +1,5 @@
-body{
-    
+html, body{
+    padding:0;
 }
 header{
     text-align: center;
@@ -11,6 +11,10 @@ header{
     
 }
 
+.container{
+    min-width: 420px;
+}
+
 h1{
     font-size: 4em !important;
 }
@@ -20,22 +24,31 @@ ul{
 }
 
 ul>li{
-    height:100px;
+    height:auto;
     background-color:#f39ab2;
     margin:15px 0px;
-    
-    
+    overflow:hidden;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
     list-style: none;
-    width:100%;
     
+    
+}
+
+.status{text-align:center;}
+
+
+li h3{
+    margin:0 !important;
 }
 
 .offline h3{
     color:#9f1036;
 }
 
-li img{
-    height:80%;
+.logo{
+    height:100px;
+    margin:0;
 }
 
 .online{
@@ -48,3 +61,7 @@ li img{
     background-color:#bbb;
 }
 
+
+@media (min-width: @screen-sm-min) {
+
+}
