@@ -1,5 +1,7 @@
 $(document).ready(function () {
     init();
+
+    
 });
 
 var ul = $("ul");
@@ -66,7 +68,7 @@ function getChannelData(streamer) {
                 for(var i=0; i<streams.length; i++){
                     var currentEntry = entries[streams[i]]
                     var liHTML = constructHtml(currentEntry);
-                    console.log(liHTML);
+                    
                     if(currentEntry.online){
                         ul.prepend(liHTML);
                     }else{
@@ -126,17 +128,16 @@ function getChannelData(streamer) {
         var liEle = "<li " + liClassId + ">";
 
         var url = channelData.streamUrl;
-        var urlEle = "<a href='" + url + "'>";
-        var imgEle = "<div class='col-xs-3'><img class='logo' src='" + channelData.logo + "'/></div>";
-        var nameDiv =  imgEle + "<div class='col-xs-9'><div class='col-sm-3'>" + urlEle + name + "</a></div>";
+        var imgEle = "<div class='col-xs-2'><img class='logo' src='" + channelData.logo + "'/></div>";
+        var urlEle = "<div class='col-xs-10 info'><div class='col-xs-4'><a href='" + url + "'>";
+        var nameDiv =  imgEle + urlEle + name + "</a></div>";
 
-        var activityStatus = channelData.status ? channelData.status : "";
-        var game = channelData.game ? channelData.game + ": " : "";
-        var activityDiv = "<div class='col-sm-7 status'>" + game + activityStatus + "</div>";
+        var activityStatus = getActivityStatus(channelData);
+        
+        var activityDiv = "<div class='col-xs-8 status'>" + activityStatus + "</div>";
 
-        var onlineStatusText = "<h3>" + onlineStatus + "</h3>";
-        var onlineStatusDiv = "<div class='col-sm-2'>" + onlineStatusText + "</div>";
-        return liEle + "<div class='row'>" + nameDiv + activityDiv + onlineStatusDiv + "</div></div></li>";
+        
+        return liEle + "<div class='row'>" + nameDiv + activityDiv  + "</div></li>";
 
     }
 
@@ -146,9 +147,34 @@ function getChannelData(streamer) {
         return liClass;
     }
 
-    
+    function getActivityStatus(channelData){
+        var status = channelData.status;
+        var game = channelData.game ? channelData.game : "";
+        if(!status || $(window).width() <= 768){
+            return game;
+        }
+        if(status.length > 45){
+            return status.split("").splice(0, 42).join("") + "...";
+        }
+        game += game ? ": " : "";
+        return game + status;
+        
+    }
 
+    function adjustActivityStatus(){
+        for(var streamer in streams){
+            var id = "#" + streams[streamer] + " .status";
+            $(id).html(getActivityStatus(entries[streams[streamer]]));
+        }
+    }
 
+    function slideOut(ele){
+        $(ele).animate({left:"10px"});
+        console.log('out');
+    }
+    function slideIn(ele){
+        $(ele).animate({right:"10px"});
+    }
 
     $('#on').on('click', function () {
         $(".offline").hide();
@@ -164,3 +190,11 @@ function getChannelData(streamer) {
         $(".offline").show();
         $(".online").show();
     });
+
+    $(window).resize(function(){
+        adjustActivityStatus();
+    });
+
+    $(".slide").hover(slideOut(this), slideIn(this));
+
+
