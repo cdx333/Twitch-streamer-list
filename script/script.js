@@ -2,6 +2,9 @@ $(document).ready(function () {
     init();
 
     
+    $('#search').val('');
+
+    
 });
 
 var ul = $("ul");
@@ -123,7 +126,7 @@ function getChannelData(streamer) {
         var name = channelData.displayName;
 
         var onlineStatus = channelData.online ? "online" : "offline";
-        var id = " id='" + name + "'";
+        var id = " id='" + name.toLowerCase() + "'";
         var liClassId = getLiClass(onlineStatus, channelData.error) + id;
         var liEle = "<li " + liClassId + ">";
 
@@ -168,12 +171,29 @@ function getChannelData(streamer) {
         }
     }
 
-    function slideOut(ele){
-        $(ele).animate({left:"10px"});
-        console.log('out');
+    function searchEntries(val){
+        val = filterStartWhitespace(val).toLowerCase();
+        for(var streamer in streams){
+            var name = streams[streamer].toLowerCase();
+            var liID = "#" + name;
+            if(val.length > 0 && name.substr(0, val.length) !== val) {
+                $(liID).hide();
+            }
+            else{
+                $(liID).show();
+            }
+        }
     }
-    function slideIn(ele){
-        $(ele).animate({right:"10px"});
+
+    function filterStartWhitespace(val){
+        while(startsWithSpace(val)){
+            val = val.split('').splice(1).join('');
+        }
+        return val;
+    }
+
+    function startsWithSpace(val){
+        return val.match(/^[\s]/);
     }
 
     $('#on').on('click', function () {
@@ -195,6 +215,8 @@ function getChannelData(streamer) {
         adjustActivityStatus();
     });
 
-    $(".slide").hover(slideOut(this), slideIn(this));
+    $('#search').on("change keyup paste", function(){
+        searchEntries($(this).val());
+    });
 
 

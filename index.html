@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
 
 <head>
@@ -8,24 +9,22 @@
 <body>
     <div class="container">
         <header>
-            <div class="slide"></div>
-            <div class="slide"></div>
-            <div class="slide"></div>
-        
+        <div id="selector-box" class="col-xs-2 pull-right">
+            <div id="on" class="slide pull-right"><div></div>Online</div>
+            <div id="off" class="slide pull-right"><div></div>Offline</div>
+            <div id="all" class="slide pull-right"><div></div>All</div>
+        </div>
             <h1>Twitch Streamers</h1>
-            
+            <form>
+            <input id="search" type="text" name="search" placeholder="Search..." value="">
+            </form>
         </header>
         <ul class = "">
             
         </ul>
+
+        
     </div>
-
-
-
-
-
-
-
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
