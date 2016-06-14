@@ -1,5 +1,6 @@
 html, body{
     padding:0;
+
 }
 header{
     text-align: center;
@@ -11,7 +12,7 @@ header{
     position:relative !important;   
 }
 
-#selector-box{
+#filter-box{
     padding:0px;
 }
 
@@ -74,8 +75,8 @@ header > form{
 }
 
 .container{
-    min-width: 420px;
     max-width: 800px;
+    min-width: 295px;
 }
 
 h1{
@@ -90,19 +91,41 @@ ul{
     padding:0px;
 }
 
-ul>li{
-    height:auto;
+ul li{
+    height: 80px;
     background-color:#F399B3;
-    padding:10px 0px 10px 10px;
     margin:5px 0px;
     font-weight: bold;    
     overflow:hidden;
     list-style: none;   
 }
 
+li a{
+    display:block;
+    position: relative;
+    padding:10px 0px;
+    height:80px;
+    width: 100%:;
+}
+
+.online:hover{
+    border:2px solid #20AF29;
+}
+
+.offline:hover{
+  border:2px solid #C92453;
+}
+
+.error:hover{
+    border: none;
+}
+
+.error a:hover{
+    cursor: default;
+}
+
 .status{
-    text-align:center;
-    line-height: 100% !important;
+    text-align: center;
 }
 .logo{
     position: relative !important;
@@ -118,4 +141,27 @@ ul>li{
 
 .error{
     background-color:#bbb;
+}
+
+@media only screen and (max-width: 767px){
+    li .info{
+        text-align: center;
+
+    }
+    .status{
+        margin-top: 10px;
+    }
+
+    li a{
+        padding: 0px 0px;
+    }
+
+    .logo{
+        height:80px;
+        border-radius: 0px;
+    }
+
+    .no-padding-left {
+     padding-left: 0 !important;
+ }
 }

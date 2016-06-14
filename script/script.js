@@ -71,7 +71,7 @@ function getChannelData(streamer) {
                 for(var i=0; i<streams.length; i++){
                     var currentEntry = entries[streams[i]]
                     var liHTML = constructHtml(currentEntry);
-                    
+                    console.log(liHTML);
                     if(currentEntry.online){
                         ul.prepend(liHTML);
                     }else{
@@ -106,7 +106,7 @@ function getChannelData(streamer) {
         channelData.status = data.message;
         channelData.errorCode = data.status;
         channelData.displayName = streamer;
-        channelData.streamUrl = "#";
+        channelData.streamUrl = "#/";
         channelData.logo = "./assets/img/error.png";
         return channelData;
     }
@@ -124,46 +124,48 @@ function getChannelData(streamer) {
     // Constructs the html for the <li> entries using the gathered data
     function constructHtml(channelData) {
         var name = channelData.displayName;
-
         var onlineStatus = channelData.online ? "online" : "offline";
-        var id = " id='" + name.toLowerCase() + "'";
-        var liClassId = getLiClass(onlineStatus, channelData.error) + id;
-        var liEle = "<li " + liClassId + ">";
-
         var url = channelData.streamUrl;
-        var imgEle = "<div class='col-xs-2'><img class='logo' src='" + channelData.logo + "'/></div>";
-        var urlEle = "<div class='col-xs-10 info'><div class='col-xs-4'><a href='" + url + "'>";
-        var nameDiv =  imgEle + urlEle + name + "</a></div>";
+        var id = " id='" + name.toLowerCase() + "'";
 
-        var activityStatus = getActivityStatus(channelData);
+        var liClassId = getLiClass(onlineStatus, channelData.error) + id;
+        var liEle = "<li " + liClassId + "> <a href='" + url + "'>";
+
+        var streamInfoDiv = "<div class='col-xs-2 no-padding-left'>";
+        var imgEle = "<img class='logo' src='" + channelData.logo + "'/></div>";
+        var textEle = "<div class='col-xs-10 info'> <div class='col-sm-4'>";
+        var nameDiv =  streamInfoDiv + imgEle + textEle + name + "</div>";
+
+        var activityStatus = getActivityStatus(channelData);        
+        var activityDiv = "<div class='col-sm-8 status'>" + activityStatus + "</div>";
         
-        var activityDiv = "<div class='col-xs-8 status'>" + activityStatus + "</div>";
-
-        
-        return liEle + "<div class='row'>" + nameDiv + activityDiv  + "</div></li>";
-
+        return liEle + nameDiv + activityDiv  + "</div></a></li>";
     }
 
+    // Setting class to determine which css rules apply
     function getLiClass(onlineStatus, error) {
         var liClass = "class='" + onlineStatus;
         liClass += error ? " error'" : "'";
         return liClass;
     }
 
+    // Return activity status as a string no greater than 45 chars
+    // OR only returns game title on smaller devices
     function getActivityStatus(channelData){
         var status = channelData.status;
         var game = channelData.game ? channelData.game : "";
-        if(!status || $(window).width() <= 768){
+        
+        if(!status || $(window).width() < 480){
             return game;
         }
         if(status.length > 45){
             return status.split("").splice(0, 42).join("") + "...";
         }
         game += game ? ": " : "";
-        return game + status;
-        
+        return game + status;        
     }
 
+    // Gets activity status for each streamer. Used on window resize
     function adjustActivityStatus(){
         for(var streamer in streams){
             var id = "#" + streams[streamer] + " .status";
@@ -171,6 +173,7 @@ function getChannelData(streamer) {
         }
     }
 
+    // Shows/hides streamer listings based on match to search term
     function searchEntries(val){
         val = filterStartWhitespace(val).toLowerCase();
         for(var streamer in streams){
@@ -185,17 +188,17 @@ function getChannelData(streamer) {
         }
     }
 
+    // Removes any starting whitespaces of recieved parameter
     function filterStartWhitespace(val){
-        while(startsWithSpace(val)){
+        while(val.match(/^[\s]/)){
             val = val.split('').splice(1).join('');
         }
         return val;
     }
 
-    function startsWithSpace(val){
-        return val.match(/^[\s]/);
-    }
+    // Events
 
+    // Shows/hides streamer listings based on online status
     $('#on').on('click', function () {
         $(".offline").hide();
         $(".online").show();
@@ -211,10 +214,12 @@ function getChannelData(streamer) {
         $(".online").show();
     });
 
+    // Calls status adjust function on window resize
     $(window).resize(function(){
         adjustActivityStatus();
     });
 
+    // Calls search function for any change in search box
     $('#search').on("change keyup paste", function(){
         searchEntries($(this).val());
     });
